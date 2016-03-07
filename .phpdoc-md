@@ -1,0 +1,9 @@
+<?php
+return (object)[
+    'rootNamespace' => 'vakata\JWT',
+    'destDirectory' => 'docs',
+    'format' => 'github',
+    'classes' => [
+        'vakata\JWT\JWT'
+    ],
+];
