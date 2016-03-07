@@ -13,7 +13,7 @@ JWT token handling.
 Via Composer
 
 ``` bash
-$ composer require vakata/JWT
+$ composer require vakata/jwt
 ```
 
 ## Usage

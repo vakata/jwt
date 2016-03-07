@@ -1,5 +1,5 @@
 <?php
-namespace vakata\JWT;
+namespace vakata\jwt;
 
 class TokenException extends \Exception
 {

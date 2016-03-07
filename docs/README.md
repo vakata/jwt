@@ -1,3 +1,3 @@
-# vakata\JWT
+# vakata\jwt
 
-* [vakata\JWT\JWT](JWT.md) 
+* [vakata\jwt\JWT](JWT.md) 

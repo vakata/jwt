@@ -5,7 +5,7 @@
         "vakata",
         "JWT"
     ],
-    "homepage": "https://github.com/vakata/JWT",
+    "homepage": "https://github.com/vakata/jwt",
     "license": "MIT",
     "authors": [
         {
@@ -31,12 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "vakata\\JWT\\": "src"
+            "vakata\\jwt\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "vakata\\JWT\\test\\": "tests"
+            "vakata\\jwt\\test\\": "tests"
         }
     },
     "scripts": {

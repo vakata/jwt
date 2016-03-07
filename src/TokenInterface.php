@@ -1,6 +1,6 @@
 <?php
 
-namespace vakata\JWT;
+namespace vakata\jwt;
 
 interface TokenInterface
 {

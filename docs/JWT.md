@@ -1,4 +1,4 @@
-# vakata\JWT\JWT
+# vakata\jwt\JWT
 A class for handling JWT
 
 ## Methods
@@ -33,7 +33,7 @@ A class for handling JWT
 
 
 
-### vakata\JWT\JWT::fromString
+### vakata\jwt\JWT::fromString
 Create an instance from a string token.  
 
 
@@ -52,7 +52,7 @@ public static function fromString (
 ---
 
 
-### vakata\JWT\JWT::getClaims
+### vakata\jwt\JWT::getClaims
 Get all claims.  
 
 
@@ -68,7 +68,7 @@ public function getClaims () : array
 ---
 
 
-### vakata\JWT\JWT::hasClaim
+### vakata\jwt\JWT::hasClaim
 Returns if a claim is present in the token.  
 
 
@@ -87,7 +87,7 @@ public function hasClaim (
 ---
 
 
-### vakata\JWT\JWT::getClaim
+### vakata\jwt\JWT::getClaim
 Get a claim value.  
 
 
@@ -108,7 +108,7 @@ public function getClaim (
 ---
 
 
-### vakata\JWT\JWT::setClaim
+### vakata\jwt\JWT::setClaim
 Set a claim on the token.  
 
 
@@ -131,7 +131,7 @@ public function setClaim (
 ---
 
 
-### vakata\JWT\JWT::getHeaders
+### vakata\jwt\JWT::getHeaders
 Get all token headers.  
 
 
@@ -147,7 +147,7 @@ public function getHeaders () : array
 ---
 
 
-### vakata\JWT\JWT::hasHeader
+### vakata\jwt\JWT::hasHeader
 Is a specific header present in the token.  
 
 
@@ -166,7 +166,7 @@ public function hasHeader (
 ---
 
 
-### vakata\JWT\JWT::getHeader
+### vakata\jwt\JWT::getHeader
 Get a specific header value.  
 
 
@@ -187,7 +187,7 @@ public function getHeader (
 ---
 
 
-### vakata\JWT\JWT::setHeader
+### vakata\jwt\JWT::setHeader
 Set a header on the token.  
 
 
@@ -208,7 +208,7 @@ public function setHeader (
 ---
 
 
-### vakata\JWT\JWT::setAudience
+### vakata\jwt\JWT::setAudience
 Set the aud claim.  
 
 
@@ -229,7 +229,7 @@ public function setAudience (
 ---
 
 
-### vakata\JWT\JWT::setExpiration
+### vakata\jwt\JWT::setExpiration
 Set the exp claim.  
 
 
@@ -250,7 +250,7 @@ public function setExpiration (
 ---
 
 
-### vakata\JWT\JWT::setId
+### vakata\jwt\JWT::setId
 Set the jti claim.  
 
 
@@ -271,7 +271,7 @@ public function setId (
 ---
 
 
-### vakata\JWT\JWT::setIssuedAt
+### vakata\jwt\JWT::setIssuedAt
 Set the iat claim.  
 
 
@@ -292,7 +292,7 @@ public function setIssuedAt (
 ---
 
 
-### vakata\JWT\JWT::setIssuer
+### vakata\jwt\JWT::setIssuer
 Set the iss claim value.  
 
 
@@ -313,7 +313,7 @@ public function setIssuer (
 ---
 
 
-### vakata\JWT\JWT::setNotBefore
+### vakata\jwt\JWT::setNotBefore
 Set the nbf claim.  
 
 
@@ -334,7 +334,7 @@ public function setNotBefore (
 ---
 
 
-### vakata\JWT\JWT::setSubject
+### vakata\jwt\JWT::setSubject
 Set the sub claim.  
 
 
@@ -355,7 +355,7 @@ public function setSubject (
 ---
 
 
-### vakata\JWT\JWT::isSigned
+### vakata\jwt\JWT::isSigned
 Returns if the token is already signed.  
 
 
@@ -371,7 +371,7 @@ public function isSigned () : boolean
 ---
 
 
-### vakata\JWT\JWT::sign
+### vakata\jwt\JWT::sign
 Sign (or re-sign) the token  
 
 
@@ -394,7 +394,7 @@ public function sign (
 ---
 
 
-### vakata\JWT\JWT::verifyHash
+### vakata\jwt\JWT::verifyHash
 Verify the signature on a hash_hmac signed token.  
 
 
@@ -413,7 +413,7 @@ public function verifyHash (
 ---
 
 
-### vakata\JWT\JWT::verifySignature
+### vakata\jwt\JWT::verifySignature
 Verify the signature on a asymmetrically signed token.  
 
 
@@ -432,7 +432,7 @@ public function verifySignature (
 ---
 
 
-### vakata\JWT\JWT::verify
+### vakata\jwt\JWT::verify
 Verify the token signature.  
 
 
@@ -453,7 +453,7 @@ public function verify (
 ---
 
 
-### vakata\JWT\JWT::isValid
+### vakata\jwt\JWT::isValid
 Is the token valid - this methods checks the claims, not the signature.  
 
 
@@ -472,7 +472,7 @@ public function isValid (
 ---
 
 
-### vakata\JWT\JWT::__toString
+### vakata\jwt\JWT::__toString
 Get the string representation of the token.  
 
 
