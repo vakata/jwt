@@ -48,21 +48,21 @@ If you discover any security related issues, please email github@vakata.com inst
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information. 
 
-[ico-version]: https://img.shields.io/packagist/v/vakata/JWT.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/vakata/jwt.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/vakata/JWT/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/vakata/JWT.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/vakata/JWT.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/vakata/JWT.svg?style=flat-square
-[ico-cc]: https://img.shields.io/codeclimate/github/vakata/JWT.svg?style=flat-square
-[ico-cc-coverage]: https://img.shields.io/codeclimate/coverage/github/vakata/JWT.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/vakata/jwt/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/vakata/jwt.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/vakata/jwt.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/vakata/jwt.svg?style=flat-square
+[ico-cc]: https://img.shields.io/codeclimate/github/vakata/jwt.svg?style=flat-square
+[ico-cc-coverage]: https://img.shields.io/codeclimate/coverage/github/vakata/jwt.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/vakata/JWT
-[link-travis]: https://travis-ci.org/vakata/JWT
-[link-scrutinizer]: https://scrutinizer-ci.com/g/vakata/JWT/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/vakata/JWT
-[link-downloads]: https://packagist.org/packages/vakata/JWT
+[link-packagist]: https://packagist.org/packages/vakata/jwt
+[link-travis]: https://travis-ci.org/vakata/jwt
+[link-scrutinizer]: https://scrutinizer-ci.com/g/vakata/jwt/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/vakata/jwt
+[link-downloads]: https://packagist.org/packages/vakata/jwt
 [link-author]: https://github.com/vakata
 [link-contributors]: ../../contributors
-[link-cc]: https://codeclimate.com/github/vakata/JWT
+[link-cc]: https://codeclimate.com/github/vakata/jwt
 
