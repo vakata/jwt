@@ -19,7 +19,19 @@ $ composer require vakata/jwt
 ## Usage
 
 ``` php
+$token = new \vakata\jwt\JWT();
+$token
+    ->setClaim("key", "value")
+    ->setExpiration("+30 days")
+    ->setIssuer("System")
+    ->sign("secretKey");
 
+$stringified = (string)$token;
+$parsed = \vakata\jwt\JWT::fromString($stringified);
+var_dump($parsed->isValid()); // true
+var_dump($parsed->isSigned()); // true
+var_dump($parsed->verifyHash("secretKey")); // true
+var_dump($parsed->getClaim("key")); // "value"
 ```
 
 Read more in the [API docs](docs/README.md)
