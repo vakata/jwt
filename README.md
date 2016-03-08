@@ -34,7 +34,7 @@ var_dump($parsed->verifyHash("secretKey")); // true
 var_dump($parsed->getClaim("key")); // "value"
 ```
 
-Read more in the [API docs](docs/README.md)
+Read more in the [API docs](docs/README.md) 
 
 ## Testing
 
