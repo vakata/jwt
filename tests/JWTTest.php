@@ -32,4 +32,15 @@ class JWTTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($token->getHeaders(), $token2->getHeaders());
 		$this->assertEquals(true, $token2->isValid());
 	}
+	public function testEncrypt()
+	{
+		$claims = [ 'test' => 'val' ];
+		$token = new \vakata\jwt\JWT($claims);
+		$token->sign('secret');
+		$key = "12345678901234567890123456789012";
+		$token2 = \vakata\jwt\JWT::fromString($token->toString($key), $key);
+		$this->assertEquals($token->getClaims(), $token2->getClaims());
+		$this->assertEquals($token->getHeaders(), $token2->getHeaders());
+		$this->assertEquals(true, $token2->isValid());
+	}
 }

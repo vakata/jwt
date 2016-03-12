@@ -23,18 +23,10 @@ class JWT implements TokenInterface
         }
     }
 
-    protected function base64UrlDecode($data)
-    {
-        return base64_decode(strtr($data, '-_', '+/'));
-    }
-    protected function base64UrlEncode($data)
-    {
-        return trim(strtr(base64_encode($data), '-_', '+/'), '=');
-    }
     protected function getPayload()
     {
-        $head = $this->base64UrlEncode(json_encode($this->headers));
-        $body = $this->base64UrlEncode(json_encode($this->claims));
+        $head = static::base64UrlEncode(json_encode($this->headers));
+        $body = static::base64UrlEncode(json_encode($this->claims));
         return $head . '.' . $body;
     }
 
@@ -44,17 +36,24 @@ class JWT implements TokenInterface
      * @param  string     $data the token string
      * @return \vakata\JWT\JWT           the new JWT instance
      */
-    public static function fromString($data)
+    public static function fromString($data, $decryptionKey = null)
     {
         $parts = explode('.', $data);
+        $head = json_decode(static::base64UrlDecode($parts[0]), true);
+        
+        if (isset($head['enc'])) {
+            $data = static::decrypt($data, $decryptionKey);
+            $parts = explode('.', $data);
+        }
+
         if (count($parts) != 3) {
             throw new TokenException("Token must have three parts");
         }
+        $head = static::base64UrlDecode($parts[0]);
+        $claims = static::base64UrlDecode($parts[1]);
+        $signature = static::base64UrlDecode($parts[2]);
 
         $token = new static();
-        list($head, $claims, $signature) = array_map(function ($v) use ($token) {
-            return $token->base64UrlDecode($v);
-        }, $parts);
         $token->headers = json_decode($head, true);
         $token->claims = json_decode($claims, true);
         $token->signature = $signature === '' ? null : $signature;
@@ -396,13 +395,126 @@ class JWT implements TokenInterface
     }
     /**
      * Get the string representation of the token.
+     * @method toString
+     * @return string     the token
+     */
+    public function toString($encryptionKey = null, $encryptionAlgo = 'A128CBC-HS256')
+    {
+        $data = $this->getPayload();
+        $sign = $this->signature === null ? '' : static::base64UrlEncode($this->signature);
+        $token = $data . '.' . $sign;
+        if ($encryptionKey) {
+            $token = static::encrypt($token, $encryptionKey, $encryptionAlgo);
+        }
+        return $token;
+    }
+    /**
+     * Get the string representation of the token.
      * @method __toString
      * @return string     the token
      */
     public function __toString()
     {
-        $data = $this->getPayload();
-        $sign = $this->signature === null ? '' : $this->base64UrlEncode($this->signature);
-        return $data . '.' . $sign;
+        return $this->toString();
+    }
+
+    public static function base64UrlDecode($data)
+    {
+        return base64_decode(strtr($data, '-_', '+/'));
+    }
+    public static function base64UrlEncode($data)
+    {
+        return trim(strtr(base64_encode($data), '-_', '+/'), '=');
+    }
+
+    public static function encrypt($payload, $key, $algorithm = 'A128CBC-HS256')
+    {
+        if (empty($payload) || (is_string($payload) && trim($payload) == '')) {
+            throw new TokenException('Payload can not be empty');
+        }
+
+        $header = static::base64UrlEncode(json_encode([
+            'alg' => 'dir',
+            'enc' => $algorithm,
+            'typ' => 'JWT',
+        ]));
+        $enckey = static::base64UrlEncode('');
+
+        switch ($algorithm) {
+            case 'A128CBC-HS256':
+                $keybit = 256;
+                if (strlen($key) * 8 != $keybit) {
+                    throw new TokenException("Encryption key is the wrong size");
+                }
+                $hmac = substr($key, 0, $keybit / 2);
+                $aes = substr($key, $keybit / 2);
+                $method = sprintf('AES-%d-CBC', $keybit / 2);
+                $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($method));
+                $encrypted = openssl_encrypt($payload, $method, $aes, true, $iv);
+
+                $length = strlen($header);
+                $input = implode('', [
+                    $header,
+                    $iv,
+                    $encrypted,
+                    pack('N2', ($length / 2147483647) * 8, ($length % 2147483647) * 8),
+                ]);
+                $auth = hash_hmac('SHA256', $input, $hmac, true);
+                $auth = substr($auth, 0, strlen($auth) / 2);
+                break;
+            default:
+                throw new TokenException('Unsupported encryption algorithm');
+        }
+
+        return implode('.', [
+            $header,
+            $enckey,
+            static::base64UrlEncode($iv),
+            static::base64UrlEncode($encrypted),
+            static::base64UrlEncode($auth)
+        ]);
+    }
+    public static function decrypt($data, $key, $algorithm = 'A128CBC-HS256')
+    {
+        $parts = explode('.', $data);
+        if (count($parts) != 5) {
+            throw new TokenException("Invalid JWE");
+        }
+        
+        $header = json_decode(static::base64UrlDecode($parts[0]), true);
+        $iv = static::base64UrlDecode($parts[2]);
+        $encrypted = static::base64UrlDecode($parts[3]);
+        $auth = static::base64UrlDecode($parts[4]);
+
+        if (!isset($header['enc'])) {
+            throw new TokenException("Invalid JWE");
+        }
+
+        switch ($header['enc']) {
+            case 'A128CBC-HS256':
+                $keybit = 256;
+                if (strlen($key) * 8 != $keybit) {
+                    throw new TokenException("Encryption key is the wrong size");
+                }
+                $hmac = substr($key, 0, $keybit / 2);
+                $aes = substr($key, $keybit / 2);
+                $method = sprintf('AES-%d-CBC', $keybit / 2);
+
+                $length = strlen($parts[0]);
+                $input = implode('', [
+                    $parts[0],
+                    $iv,
+                    $encrypted,
+                    pack('N2', ($length / 2147483647) * 8, ($length % 2147483647) * 8),
+                ]);
+                $temp = hash_hmac('SHA256', $input, $hmac, true);
+                $temp = substr($temp, 0, strlen($temp) / 2);
+                if ($temp !== $auth) {
+                    throw new TokenException('Invalid JWE signature');
+                }
+                return openssl_decrypt($encrypted, $method, $aes, true, $iv);
+            default:
+                throw new TokenException("Unsupported algorithm");
+        }
     }
 }
