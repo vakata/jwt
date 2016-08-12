@@ -106,6 +106,20 @@ class JWT implements TokenInterface
         return $this;
     }
     /**
+     * Set claims on the token.
+     * @method setClaims
+     * @param  array    $claims    the claims to set (key => value)
+     * @param  boolean  $asHeader  optional parameter indicating if the claims should be copied in the header section
+     * @return  self
+     */
+    public function setClaims(array $claims, $asHeader = false)
+    {
+        foreach ($claims as $claim => $value) {
+            $this->setClaim($claim, $value, $asHeader);
+        }
+        return $this;
+    }
+    /**
      * Get all token headers.
      * @method getHeaders
      * @return array     all headers

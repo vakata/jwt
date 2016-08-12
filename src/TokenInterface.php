@@ -10,6 +10,7 @@ interface TokenInterface
     public function hasClaim($key);
     public function getClaim($key, $default = null);
     public function setClaim($key, $value, $asHeader = false);
+    public function setClaims(array $claims, $asHeader = false);
 
     public function getHeaders();
     public function hasHeader($key);
