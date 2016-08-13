@@ -11,16 +11,12 @@ class JWT implements TokenInterface
     protected $claims = [];
     protected $signature = null;
 
-    public function __construct(array $claims = [], $algo = 'HS256', $validity = 86400)
+    public function __construct(array $claims = [], $algo = 'HS256')
     {
         $this->headers['typ'] = 'JWT';
         $this->headers['alg'] = $algo;
 
-        $this->setIssuedAt(time());
-        $this->setExpiration(time() + $validity);
-        foreach ($claims as $claim => $value) {
-            $this->setClaim($claim, $value);
-        }
+        $this->setClaims($claims);
     }
 
     protected function getPayload()
