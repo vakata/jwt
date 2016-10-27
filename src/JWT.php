@@ -28,7 +28,6 @@ class JWT implements TokenInterface
 
     /**
      * Create an instance from a string token.
-     * @method fromString
      * @param  string     $data the token string
      * @return \vakata\JWT\JWT           the new JWT instance
      */
@@ -57,7 +56,6 @@ class JWT implements TokenInterface
     }
     /**
      * Get all claims.
-     * @method getClaims
      * @return array    all claims in the token (key-value pairs)
      */
     public function getClaims()
@@ -66,7 +64,6 @@ class JWT implements TokenInterface
     }
     /**
      * Returns if a claim is present in the token.
-     * @method hasClaim
      * @param  string   $key the claim name
      * @return boolean       whether the claim is present
      */
@@ -76,7 +73,6 @@ class JWT implements TokenInterface
     }
     /**
      * Get a claim value.
-     * @method getClaim
      * @param  string   $key     the claim name
      * @param  mixed   $default  optional default value to use if the claim is not present
      * @return mixed             the claim value
@@ -87,7 +83,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set a claim on the token.
-     * @method setClaim
      * @param  string   $key      the claim name
      * @param  mixed   $value     the claim value
      * @param  boolean  $asHeader optional parameter indicating if the claim should be copied in the header section
@@ -103,7 +98,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set claims on the token.
-     * @method setClaims
      * @param  array    $claims    the claims to set (key => value)
      * @param  boolean  $asHeader  optional parameter indicating if the claims should be copied in the header section
      * @return  self
@@ -117,7 +111,6 @@ class JWT implements TokenInterface
     }
     /**
      * Get all token headers.
-     * @method getHeaders
      * @return array     all headers
      */
     public function getHeaders()
@@ -126,7 +119,6 @@ class JWT implements TokenInterface
     }
     /**
      * Is a specific header present in the token.
-     * @method hasHeader
      * @param  string    $key the header name
      * @return boolean        whether the header is present
      */
@@ -136,7 +128,6 @@ class JWT implements TokenInterface
     }
     /**
      * Get a specific header value.
-     * @method getHeader
      * @param  string    $key     the header name
      * @param  mixed     $default optional default value to return if the header is not present
      * @return mixed              the header value
@@ -147,7 +138,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set a header on the token.
-     * @method setHeader
      * @param  string    $key   the header name
      * @param  mixed     $value the header value
      * @return  self
@@ -159,7 +149,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set the aud claim.
-     * @method setAudience
      * @param  mixed       $value    the aud claim value
      * @param  boolean     $asHeader optional parameter indicating if the claim should be copied in the header section
      * @return  self
@@ -170,7 +159,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set the exp claim.
-     * @method setExpiration
      * @param  mixed       $value    the exp claim value (should either be a timestamp or strtotime expression)
      * @param  boolean     $asHeader optional parameter indicating if the claim should be copied in the header section
      * @return  self
@@ -181,7 +169,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set the jti claim.
-     * @method setId
      * @param  mixed   $value    the jti claim value
      * @param  boolean $asHeader optional parameter indicating if the claim should be copied in the header section
      * @return  self
@@ -192,7 +179,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set the iat claim.
-     * @method setIssuedAt
      * @param  mixed       $value    the iat claim value (should either be a timestamp or a strtotime expression)
      * @param  boolean     $asHeader optional parameter indicating if the claim should be copied in the header section
      * @return self
@@ -203,7 +189,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set the iss claim value.
-     * @method setIssuer
      * @param  mixed     $value    the iss claim value
      * @param  boolean   $asHeader optional parameter indicating if the claim should be copied in the header section
      * @return self
@@ -214,7 +199,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set the nbf claim.
-     * @method setNotBefore
      * @param  mixed        $value    the nbf claim value (should either be a timestamp or a strtotime expression)
      * @param  boolean      $asHeader optional parameter indicating if the claim should be copied in the header section
      * @return self
@@ -225,7 +209,6 @@ class JWT implements TokenInterface
     }
     /**
      * Set the sub claim.
-     * @method setSubject
      * @param  mixed      $value    the sub claim value
      * @param  boolean    $asHeader optional parameter indicating if the claim should be copied in the header section
      * @return  self
@@ -236,7 +219,6 @@ class JWT implements TokenInterface
     }
     /**
      * Returns if the token is already signed.
-     * @method isSigned
      * @return boolean  is the token signed
      */
     public function isSigned()
@@ -245,7 +227,6 @@ class JWT implements TokenInterface
     }
     /**
      * Sign (or re-sign) the token
-     * @method sign
      * @param  mixed  $key  the key to sign with (either a secret expression or the location of a private key)
      * @param  string $pass if a private key is used - the password for it
      * @param  string $kid  if an array of keys is passed in, this determines which key ID should be used
@@ -299,7 +280,6 @@ class JWT implements TokenInterface
     }
     /**
      * Verify the signature on a hash_hmac signed token.
-     * @method verifyHash
      * @param  string     $key the key to verify with
      * @return boolean    is the signature valid
      */
@@ -312,7 +292,6 @@ class JWT implements TokenInterface
     }
     /**
      * Verify the signature on a asymmetrically signed token.
-     * @method verifySignature
      * @param  string          $key the location to the public key
      * @return boolean         is the signature valid
      */
@@ -325,7 +304,6 @@ class JWT implements TokenInterface
     }
     /**
      * Verify the token signature.
-     * @method verify
      * @param  string $key  the preshared secret, or the location to a public key
      * @param  string $algo optionally force to use this alg (instead of reading from the token headers)
      * @return boolean      is the signature valid
@@ -372,7 +350,6 @@ class JWT implements TokenInterface
     }
     /**
      * Is the token valid - this methods checks the claims, not the signature.
-     * @method isValid
      * @param  array   $claims optional array of claim values to compare against
      * @return boolean         is the token valid
      */
@@ -405,7 +382,6 @@ class JWT implements TokenInterface
     }
     /**
      * Get the string representation of the token.
-     * @method toString
      * @return string     the token
      */
     public function toString($encryptionKey = null, $encryptionAlgo = 'A128CBC-HS256')
@@ -420,7 +396,6 @@ class JWT implements TokenInterface
     }
     /**
      * Get the string representation of the token.
-     * @method __toString
      * @return string     the token
      */
     public function __toString()
