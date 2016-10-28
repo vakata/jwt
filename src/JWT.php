@@ -29,7 +29,7 @@ class JWT implements TokenInterface
     /**
      * Create an instance from a string token.
      * @param  string     $data the token string
-     * @return \vakata\JWT\JWT           the new JWT instance
+     * @return self             the new JWT instance
      */
     public static function fromString($data, $decryptionKey = null)
     {
