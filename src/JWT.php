@@ -7,6 +7,7 @@ namespace vakata\jwt;
  */
 class JWT implements TokenInterface
 {
+    protected $payload = null;
     protected $headers = [];
     protected $claims = [];
     protected $signature = null;
@@ -21,6 +22,9 @@ class JWT implements TokenInterface
 
     protected function getPayload()
     {
+        if ($this->payload) {
+            return $this->payload;
+        }
         $head = static::base64UrlEncode(json_encode($this->headers));
         $body = static::base64UrlEncode(json_encode($this->claims));
         return $head . '.' . $body;
@@ -52,6 +56,7 @@ class JWT implements TokenInterface
         $token->headers = json_decode($head, true);
         $token->claims = json_decode($claims, true);
         $token->signature = $signature === '' ? null : $signature;
+        $token->payload = $parts[0] . '.' . $parts[1];
         return $token;
     }
     /**
@@ -90,6 +95,7 @@ class JWT implements TokenInterface
      */
     public function setClaim($key, $value, $asHeader = false)
     {
+        $this->payload = null;
         $this->claims[$key] = $value;
         if ($asHeader) {
             $this->setHeader($key, $value);
@@ -104,6 +110,7 @@ class JWT implements TokenInterface
      */
     public function setClaims(array $claims, $asHeader = false)
     {
+        $this->payload = null;
         foreach ($claims as $claim => $value) {
             $this->setClaim($claim, $value, $asHeader);
         }
@@ -144,6 +151,7 @@ class JWT implements TokenInterface
      */
     public function setHeader($key, $value)
     {
+        $this->payload = null;
         $this->headers[$key] = $value;
         return $this;
     }
@@ -409,7 +417,7 @@ class JWT implements TokenInterface
     }
     public static function base64UrlEncode($data)
     {
-        return trim(strtr(base64_encode($data), '-_', '+/'), '=');
+        return trim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
     public static function encrypt($payload, $key, $algorithm = 'A128CBC-HS256')
