@@ -264,7 +264,8 @@ class JWT implements TokenInterface
                 if (!isset($details['key']) || $details['type'] !== OPENSSL_KEYTYPE_EC) {
                     throw new TokenException('The key is not compatible with RSA signatures');
                 }
-                openssl_sign($data, $this->signature, $key, str_replace('ES', 'SHA', $algo));
+                openssl_sign($data, $signature, $key, str_replace('ES', 'SHA', $algo));
+                $this->signature = static::signatureFromDER($signature, (int)str_replace('ES', '', $algo));
                 break;
             case 'RS256':
             case 'RS384':
@@ -310,12 +311,74 @@ class JWT implements TokenInterface
         }
         return $this->verify($key);
     }
-    /**
-     * Verify the token signature.
-     * @param  string $key  the preshared secret, or the location to a public key
-     * @param  string $algo optionally force to use this alg (instead of reading from the token headers)
-     * @return boolean      is the signature valid
-     */
+
+    protected static function signatureToDER(string $sig): string
+    {
+        $length = max(1, (int) (\strlen($sig) / 2));
+        list($r, $s) = \str_split($sig, $length);
+        $r = \ltrim($r, "\x00");
+        $s = \ltrim($s, "\x00");
+        if (\ord($r[0]) > 0x7f) {
+            $r = "\x00" . $r;
+        }
+        if (\ord($s[0]) > 0x7f) {
+            $s = "\x00" . $s;
+        }
+        return self::encodeDER(
+            0x10,
+            self::encodeDER(0x02, $r) .
+            self::encodeDER(0x02, $s)
+        );
+    }
+    protected static function encodeDER(int $type, string $value): string
+    {
+        $tag_header = 0;
+        if ($type === 0x10) {
+            $tag_header |= 0x20;
+        }
+        $der = \chr($tag_header | $type);
+        $der .= \chr(\strlen($value));
+        return $der . $value;
+    }
+    private static function signatureFromDER(string $der, int $keySize): string
+    {
+        list($offset, $_) = self::readDER($der);
+        list($offset, $r) = self::readDER($der, $offset);
+        list($offset, $s) = self::readDER($der, $offset);
+        $r = \ltrim($r, "\x00");
+        $s = \ltrim($s, "\x00");
+        $r = \str_pad($r, $keySize / 8, "\x00", STR_PAD_LEFT);
+        $s = \str_pad($s, $keySize / 8, "\x00", STR_PAD_LEFT);
+        return $r . $s;
+    }
+    private static function readDER(string $der, int $offset = 0): array
+    {
+        $pos = $offset;
+        $size = \strlen($der);
+        $constructed = (\ord($der[$pos]) >> 5) & 0x01;
+        $type = \ord($der[$pos++]) & 0x1f;
+        $len = \ord($der[$pos++]);
+        if ($len & 0x80) {
+            $n = $len & 0x1f;
+            $len = 0;
+            while ($n-- && $pos < $size) {
+                $len = ($len << 8) | \ord($der[$pos++]);
+            }
+        }
+        if ($type === 0x03) {
+            $pos++;
+            $data = \substr($der, $pos, $len - 1);
+            $pos += $len - 1;
+        } elseif (!$constructed) {
+            $data = \substr($der, $pos, $len);
+            $pos += $len;
+        } else {
+            $data = null;
+        }
+        return [$pos, $data];
+    }
+
+
     public function verify($key, $algo = null)
     {
         if (is_array($key)) {
@@ -338,7 +401,8 @@ class JWT implements TokenInterface
                 if (!isset($details['key']) || $details['type'] !== OPENSSL_KEYTYPE_EC) {
                     throw new TokenException('The key is not compatible with RSA signatures');
                 }
-                return openssl_verify($data, $this->signature, $key, str_replace('ES', 'SHA', $algo)) === 1;
+                $signature = static::signatureToDER($this->signature);
+                return openssl_verify($data, $signature, $key, str_replace('ES', 'SHA', $algo)) === 1;
             case 'RS256':
             case 'RS384':
             case 'RS512':
