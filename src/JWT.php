@@ -433,13 +433,14 @@ class JWT implements TokenInterface
         )) {
             return false;
         }
-        if ($this->getClaim('iat', time()) > time()) {
+        $tm = time();
+        if ($this->getClaim('iat', $tm) > $tm) {
             return false;
         }
-        if ($this->getClaim('nbf', time()) > time()) {
+        if ($this->getClaim('nbf', $tm) > $tm) {
             return false;
         }
-        if ($this->getClaim('exp', time()) < time()) {
+        if ($this->getClaim('exp', $tm) < $tm) {
             return false;
         }
         foreach ($claims as $key => $value) {
