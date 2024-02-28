@@ -1,17 +1,10 @@
 <?php
-namespace vakata\jwt\test;
+namespace vakata\jwt\tests;
 
-class JWTTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+final class JWTTest extends TestCase
 {
-	public static function setUpBeforeClass() {
-	}
-	public static function tearDownAfterClass() {
-	}
-	protected function setUp() {
-	}
-	protected function tearDown() {
-	}
-
 	public function testCreate() {
 		$claims = [ 'test' => 'val' ];
 		$token = new \vakata\jwt\JWT($claims);

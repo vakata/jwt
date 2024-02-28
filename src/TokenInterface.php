@@ -4,40 +4,48 @@ namespace vakata\jwt;
 
 interface TokenInterface
 {
-    public static function fromString($token);
+    public static function fromString(string $token): self;
 
-    public function getClaims();
-    public function hasClaim($key);
-    public function getClaim($key, $default = null);
-    public function setClaim($key, $value, $asHeader = false);
-    public function setClaims(array $claims, $asHeader = false);
+    /**
+     * @return array<string,mixed>
+     */
+    public function getClaims(): array;
+    public function hasClaim(string $key): bool;
+    public function getClaim(string $key, mixed $default = null): mixed;
+    public function setClaim(string $key, mixed $value, bool $asHeader = false): self;
+    /**
+     * @param array<string,mixed> $claims
+     * @param bool $asHeader
+     * @return $this
+     */
+    public function setClaims(array $claims, bool $asHeader = false): self;
+    /**
+     * @return array<string,mixed>
+     */
+    public function getHeaders(): array;
+    public function hasHeader(string $key): bool;
+    public function getHeader(string $key, mixed $default = null): mixed;
+    public function setHeader(string $key, mixed $value): self;
 
-    public function getHeaders();
-    public function hasHeader($key);
-    public function getHeader($key, $default = null);
-    public function setHeader($key, $value);
+    public function setAudience(mixed $value, bool $asHeader = false): self;
+    public function setExpiration(int|string $value, bool $asHeader = false): self;
+    public function setId(mixed $value, bool $asHeader = false): self;
+    public function setIssuedAt(int|string $value, bool $asHeader = false): self;
+    public function setIssuer(mixed $value, bool $asHeader = false): self;
+    public function setNotBefore(int|string $value, bool $asHeader = false): self;
+    public function setSubject(mixed $value, bool $asHeader = false): self;
 
-    public function setAudience($value, $asHeader = false);
-    public function setExpiration($value, $asHeader = false);
-    public function setId($value, $asHeader = false);
-    public function setIssuedAt($value, $asHeader = false);
-    public function setIssuer($value, $asHeader = false);
-    public function setNotBefore($value, $asHeader = false);
-    public function setSubject($value, $asHeader = false);
+    public function isSigned(): bool;
+    public function sign(mixed $key, string $pass = '', ?string $kid = null): self;
+    public function verifyHash(string $key): bool;
+    public function verifySignature(string $key): bool;
+    public function verify(string $key, ?string $algo = null): bool;
 
-    public function isSigned();
-    public function sign($key, $pass = '', $kid = null);
-    public function verifyHash($key);
-    public function verifySignature($key);
-    public function verify($key, $algo = null);
+    /**
+     * @param array<string,mixed> $claims
+     * @return bool
+     */
+    public function isValid(array $claims = []): bool;
 
-    public function isValid(array $claims = []);
-
-    public function __toString();
-
-    /*
-    public function isEncrypted();
-    public function encrypt($key);
-    public function decrypt($key);
-    */
+    public function __toString(): string;
 }
