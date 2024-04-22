@@ -532,8 +532,8 @@ class JWT implements TokenInterface
                 if (strlen($key) * 8 != $keybit) {
                     throw new TokenException("Encryption key is the wrong size");
                 }
-                $hmac = substr($key, 0, $keybit / 2);
-                $aes = substr($key, $keybit / 2);
+                $hmac = substr($key, 0, ($keybit / 8) / 2);
+                $aes = substr($key, ($keybit / 8) / 2);
                 $method = sprintf('AES-%d-CBC', $keybit / 2);
                 $len = openssl_cipher_iv_length($method);
                 if ($len === false) {
@@ -589,8 +589,8 @@ class JWT implements TokenInterface
                 if (strlen($key) * 8 != $keybit) {
                     throw new TokenException("Encryption key is the wrong size");
                 }
-                $hmac = substr($key, 0, $keybit / 2);
-                $aes = substr($key, $keybit / 2);
+                $hmac = substr($key, 0, ($keybit / 8) / 2);
+                $aes = substr($key, ($keybit / 8) / 2);
                 $method = sprintf('AES-%d-CBC', $keybit / 2);
 
                 $length = strlen($parts[0]);
